@@ -21,18 +21,14 @@ void setup()
 {
     rectMode(CENTER);
     initGrid();
+
+    // Get a static reference to the instance of the 'main' class.
     processingInstance = this;
 }
 
 void draw()
 {
-    for (int i = 0; i < grid.length; i++)
-    {
-        for (int j = 0; j < grid[i].length; j++)
-        {
-            grid[i][j].display();
-        }
-    }
+    displayGrid();
     ParticleSys.renderExplosions();
     ParticleSys.removeExplosions();
 }
@@ -58,6 +54,18 @@ public void initGrid()
     }
 }
 
+public void displayGrid()
+{
+    for (int i = 0; i < grid.length; i++)
+    {
+        for (int j = 0; j < grid[i].length; j++)
+        {
+            grid[i][j].display();
+        }
+    }
+}
+
+// Get the tile on a coord
 public Tile getTileOnCoord(int x, int y)
 {
     print("Mouse X: " + x, " Mouse Y: " + y + "\n");
@@ -68,9 +76,13 @@ public Tile getTileOnCoord(int x, int y)
     return grid[xIndex][yIndex];
 }
 
-void mousePressed()
+// When the mouse is pressed...
+public void mousePressed()
 {
+    // ... get the color of the tile that the mouse is in
     color tileUnderMouseColor = getTileOnCoord(mouseX, mouseY).getColor();
+
+    // create a particle explosion at the location of the mouse in that color
     fill(tileUnderMouseColor);
     ParticleSys.createExplosionAt(mouseX, mouseY, tileUnderMouseColor);
 }
