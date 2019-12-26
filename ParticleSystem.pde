@@ -10,6 +10,8 @@ private final int TILE_HEIGHT = SIZE_Y / NUM_TILES_Y;
 
 private Tile[][] grid = new Tile[NUM_TILES_X][NUM_TILES_Y];
 
+static ParticleSystem processingInstance;
+
 void settings()
 {
     size(SIZE_X, SIZE_Y);
@@ -19,6 +21,20 @@ void setup()
 {
     rectMode(CENTER);
     initGrid();
+    processingInstance = this;
+}
+
+void draw()
+{
+    for (int i = 0; i < grid.length; i++)
+    {
+        for (int j = 0; j < grid[i].length; j++)
+        {
+            grid[i][j].display();
+        }
+    }
+    ParticleSys.renderExplosions();
+    ParticleSys.removeExplosions();
 }
 
 public void initGrid()
@@ -52,50 +68,15 @@ public Tile getTileOnCoord(int x, int y)
     return grid[xIndex][yIndex];
 }
 
-void draw()
-{
-    for (int i = 0; i < grid.length; i++)
-    {
-        for (int j = 0; j < grid[i].length; j++)
-        {
-            grid[i][j].display();
-        }
-    }
-}
-
 void mousePressed()
 {
-    getTileOnCoord(mouseX, mouseY);
+    color tileUnderMouseColor = getTileOnCoord(mouseX, mouseY).getColor();
+    fill(tileUnderMouseColor);
+    ParticleSys.createExplosionAt(mouseX, mouseY, tileUnderMouseColor);
 }
 
-class Tile
-{
-    int x, y;
-    int w, h;
-    color fillColor;
 
-    Tile(int x, int y, int w, int h, color fillColor)
-    {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.fillColor = fillColor;
-    }
 
-    void display()
-    {
-        fill(fillColor);
-        rect(x, y, w, h);
-    }
 
-    public color getColor()
-    {
-        return fillColor;
-    }
-}
 
-static class ParticleSys
-{
 
-}
